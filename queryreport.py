@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 # Copyright 2012 Corey Shields cshields@gmail.com
 # License for use and modification under GPLv2
 # Captures a sequence of coordinates, one set per call of this command
@@ -7,6 +9,7 @@
 
 import argparse
 import logging
+import shutil
 
 logging.basicConfig(filename='queryreport.log',level=logging.INFO,
 					format='%(asctime)s,%(message)s', 
@@ -22,3 +25,9 @@ parser.add_argument('longitude',
 
 args = parser.parse_args()
 logging.info(args.sequence + ',' + args.latitude + ',' + args.longitude)
+
+f = open('queryreport_out.txt','w')
+print >>f, '' + args.sequence + ',' + args.latitude + ',' + args.longitude
+f.close()
+
+shutil.move('queryreport_out.txt', '/dstar/tmp/text-c')
