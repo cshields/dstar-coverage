@@ -11,6 +11,10 @@ import argparse
 import logging
 import shutil
 
+# which module file the responses should be sent to (should match the
+# module of incoming messages from dstarquery)
+CONFIG_MODULE_DEST = "/dstar/tmp/text-c"
+
 logging.basicConfig(filename='queryreport.log',level=logging.INFO,
 					format='%(asctime)s,%(message)s', 
 					datefmt='%m/%d/%Y %I:%M:%S %p')
@@ -30,4 +34,8 @@ f = open('queryreport_out.txt','w')
 print >>f, '' + args.sequence + ',' + args.latitude + ',' + args.longitude
 f.close()
 
-shutil.move('queryreport_out.txt', '/dstar/tmp/text-c')
+try:
+    shutil.move('queryreport_out.txt', CONFIG_MODULE_DEST)
+except IOError as e:
+    print "There was an error trying to send the report to the dstar text channel (%s). The channel configured or parent directories may not exist.\n" % CONFIG_MODULE_DEST
+    print "I/O error({0}): {1}".format(e.errno, e.strerror)
